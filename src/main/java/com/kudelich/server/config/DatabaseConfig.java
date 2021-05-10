@@ -7,8 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.Resource;
@@ -27,7 +29,7 @@ public class DatabaseConfig {
     private Environment environment;
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(){
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
         entityManagerFactoryBean.setDataSource(dataSource());
@@ -45,14 +47,14 @@ public class DatabaseConfig {
             InputStream stream = getClass().getClassLoader().getResourceAsStream("hibernate.properties");
             properties.load(stream);
 
-            return properties; 
-        }catch (IOException ex){
-            throw new IllegalArgumentException("Can't find hibernate/properties",ex);
+            return properties;
+        } catch (IOException ex) {
+            throw new IllegalArgumentException("Can't find hibernate/properties", ex);
         }
     }
 
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
 
         dataSource.setUrl(environment.getRequiredProperty("db.url"));
@@ -60,6 +62,22 @@ public class DatabaseConfig {
         dataSource.setUsername(environment.getRequiredProperty("db.username"));
         dataSource.setPassword(environment.getRequiredProperty("db.password"));
 
+        dataSource.setInitialSize(Integer.parseInt(environment.getRequiredProperty("db.initialSize")));
+        dataSource.setMinIdle(Integer.parseInt(environment.getRequiredProperty("db.minIdle")));
+        dataSource.setMaxIdle(Integer.parseInt(environment.getRequiredProperty("db.maxIdle")));
+        dataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(environment.getRequiredProperty("db.timeBetweenEvictionRunsMillis")));
+        dataSource.setMinEvictableIdleTimeMillis(Long.parseLong(environment.getRequiredProperty("db.minEvictableIdleTimeMillis")));
+        dataSource.setTestOnBorrow(Boolean.parseBoolean(environment.getRequiredProperty("db.testOnBorrow")));
+        dataSource.setValidationQuery(environment.getRequiredProperty("db.validationQuery"));
+
         return dataSource;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        JpaTransactionManager manager = new JpaTransactionManager();
+        manager.setEntityManagerFactory(entityManagerFactory().getObject());
+
+        return manager;
     }
 }

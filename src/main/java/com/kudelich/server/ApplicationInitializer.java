@@ -20,6 +20,6 @@ public class ApplicationInitializer implements WebApplicationInitializer {
 
         ServletRegistration.Dynamic servlet = servletContext.addServlet(DISPATCHER,new DispatcherServlet(context));
         servlet.addMapping("/");
-        servlet.setLoadOnStartup(1);
+        servlet.setLoadOnStartup(2);
     }
 }
