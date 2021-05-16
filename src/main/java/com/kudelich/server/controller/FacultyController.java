@@ -22,7 +22,7 @@ public class FacultyController {
 
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
     @ResponseBody
-    public List<Faculty> getClassesById(@PathVariable("id") long id){
+    public Faculty getClassesById(@PathVariable("id") long id){
         return service.getById(id);
     }
 

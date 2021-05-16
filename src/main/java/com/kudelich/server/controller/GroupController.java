@@ -21,7 +21,7 @@ public class GroupController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Group> getClassesById(@PathVariable("id") long id) {
+    public Group getClassesById(@PathVariable("id") long id) {
         return service.getById(id);
     }
 

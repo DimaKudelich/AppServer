@@ -17,8 +17,8 @@ public class FacultyService implements ServiceT<Faculty> {
         return repository.findAll();
     }
 
-    public List<Faculty> getById(long id) {
-        return repository.findAllById(Collections.singleton(id));
+    public Faculty getById(long id) {
+        return repository.findAllById(Collections.singleton(id)).get(0);
     }
 
     public Faculty save(Faculty object) {

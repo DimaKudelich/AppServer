@@ -18,6 +18,17 @@ public class Group {
     @Column(name = "curator",nullable = false)
     private String curator;
 
+    @Column(name= "group_number", nullable = false)
+    private int groupNumber;
+
+    public int getGroupNumber() {
+        return groupNumber;
+    }
+
+    public void setGroupNumber(int groupNumber) {
+        this.groupNumber = groupNumber;
+    }
+
     public Group(){
 
     }

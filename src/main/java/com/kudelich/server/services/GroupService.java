@@ -17,8 +17,8 @@ public class GroupService implements ServiceT<Group> {
         return repository.findAll();
     }
 
-    public List<Group> getById(long id) {
-        return repository.findAllById(Collections.singleton(id));
+    public Group getById(long id) {
+        return repository.findAllById(Collections.singleton(id)).get(0);
     }
 
     public Group save(Group object) {

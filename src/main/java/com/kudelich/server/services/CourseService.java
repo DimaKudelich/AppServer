@@ -17,8 +17,8 @@ public class CourseService implements ServiceT<Course>{
         return repository.findAll();
     }
 
-    public List<Course> getById(long id) {
-        return repository.findAllById(Collections.singleton(id));
+    public Course getById(long id) {
+        return repository.findAllById(Collections.singleton(id)).get(0);
     }
 
     public Course save(Course object) {

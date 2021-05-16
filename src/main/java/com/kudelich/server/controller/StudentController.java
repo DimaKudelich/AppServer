@@ -21,7 +21,7 @@ public class StudentController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Student> getClassesById(@PathVariable("id") long id) {
+    public Student getClassesById(@PathVariable("id") long id) {
         return service.getById(id);
     }
 

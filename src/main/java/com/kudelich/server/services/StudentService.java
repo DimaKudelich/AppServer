@@ -17,8 +17,8 @@ public class StudentService implements ServiceT<Student>{
         return repository.findAll();
     }
 
-    public List<Student> getById(long id) {
-        return repository.findAllById(Collections.singleton(id));
+    public Student getById(long id) {
+        return repository.findAllById(Collections.singleton(id)).get(0);
     }
 
     public Student save(Student object) {

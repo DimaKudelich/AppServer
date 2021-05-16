@@ -3,7 +3,6 @@ package com.kudelich.server.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "shedule")
