@@ -27,15 +27,15 @@ public class OperationsController {
     private ServiceT<Student> studentsService;
 
     //get courses by faculty id
-    @RequestMapping(value = "/faculties/courses/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/faculties/courses/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Course> getCoursesByFacultyId(@PathVariable("id") long id){
+    public List<Course> getCoursesByFacultyId(@PathVariable("id") long id) {
         List<Course> allCourses = coursesService.getAll();
 
-        List<Course>result = new ArrayList<Course>();
+        List<Course> result = new ArrayList<Course>();
 
         for (int i = 0; i < allCourses.size(); i++) {
-            if (allCourses.get(i).getFacultyId() == id){
+            if (allCourses.get(i).getFacultyId() == id) {
                 result.add(allCourses.get(i));
             }
         }
@@ -44,14 +44,14 @@ public class OperationsController {
     }
 
     //get groups by course id
-    @RequestMapping(value = "/faculties/courses/groups/{id_course}",method = RequestMethod.GET)
+    @RequestMapping(value = "/faculties/courses/groups/{id_course}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Group> getGroupsByCourseId(@PathVariable("id_course") long courseId){
-        List<Group>groups = groupsService.getAll();
-        List<Group>result = new ArrayList<>();
+    public List<Group> getGroupsByCourseId(@PathVariable("id_course") long courseId) {
+        List<Group> groups = groupsService.getAll();
+        List<Group> result = new ArrayList<>();
 
-        for (Group group:groups) {
-            if (group.getCourseId() == courseId){
+        for (Group group : groups) {
+            if (group.getCourseId() == courseId) {
                 result.add(group);
             }
         }
@@ -60,14 +60,14 @@ public class OperationsController {
     }
 
     //get students by group id
-    @RequestMapping(value = "/faculties/courses/groups/students/{id_group}",method = RequestMethod.GET)
+    @RequestMapping(value = "/faculties/courses/groups/students/{id_group}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Student> getStudentsByGroupId(@PathVariable("id_group") long groupId){
-        List<Student>students = studentsService.getAll();
-        List<Student>result = new ArrayList<>();
+    public List<Student> getStudentsByGroupId(@PathVariable("id_group") long groupId) {
+        List<Student> students = studentsService.getAll();
+        List<Student> result = new ArrayList<>();
 
-        for (Student student:students) {
-            if (student.getGroupId()==groupId){
+        for (Student student : students) {
+            if (student.getGroupId() == groupId) {
                 result.add(student);
             }
         }
@@ -76,41 +76,43 @@ public class OperationsController {
     }
 
     //get schedule by group id
-    @RequestMapping(value = "/faculties/courses/groups/schedule/{id_group}",method = RequestMethod.GET)
+    @RequestMapping(value = "/faculties/courses/groups/schedule/{id_group}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Classes> getScheduleByGroupId(@PathVariable("id_group") long groupId){
-        List<Classes>classes = classesService.getAll();
-        List<Classes>result = new ArrayList<>();
+    public List<Classes> getScheduleByGroupId(@PathVariable("id_group") long groupId) {
+        List<Classes> classes = classesService.getAll();
+        List<Classes> result = new ArrayList<>();
 
-        for (Classes clas:classes) {
-            if (clas.getGroupId()==groupId){
+        for (Classes clas : classes) {
+            if (clas.getGroupId() == groupId) {
                 result.add(clas);
             }
         }
 
         boolean flag = true;
-        while(flag){
+        while (flag) {
             flag = false;
 
-            for (int i = 0; i < result.size(); i++) {
-                for (int j = 0; j < result.size(); j++) {
-                    if (result.get(i).getDayOfWeek()>result.get(j).getDayOfWeek()){
-                        Classes tmp = result.get(i);
-                        result.set(i,result.get(j));
-                        result.set(j,tmp);
-                        flag = true;
-                    }
+            for (int i = 0; i < result.size()-1; i++) {
+                int j = i +1;
+
+                if (result.get(i).getDayOfWeek() > result.get(j).getDayOfWeek()) {
+                    Classes tmp = result.get(i);
+                    result.set(i, result.get(j));
+                    result.set(j, tmp);
+                    flag = true;
                 }
             }
         }
+
+
 
         return result;
     }
 
     //get all classes by user id
-    @RequestMapping(value = "/faculties/courses/groups/student/schedule/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/faculties/courses/groups/student/schedule/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Classes>getAllClassesByUserId(@PathVariable("id") long id){
+    public List<Classes> getAllClassesByUserId(@PathVariable("id") long id) {
         Student student = studentsService.getById(id);
         long groupId = student.getGroupId();
 
@@ -118,13 +120,13 @@ public class OperationsController {
     }
 
     //get student id by login and password
-    @RequestMapping(value = "/students/{login}/{password}",method = RequestMethod.GET)
+    @RequestMapping(value = "/students/{login}/{password}", method = RequestMethod.GET)
     @ResponseBody
-    public long getStudentIdByLoginAndPassword(@PathVariable("login") String login,@PathVariable("password") String password){
+    public long getStudentIdByLoginAndPassword(@PathVariable("login") String login, @PathVariable("password") String password) {
         List<Student> students = studentsService.getAll();
 
-        for (Student student:students) {
-            if (student.getLogin().equals(login)&&student.getPassword().equals(password)){
+        for (Student student : students) {
+            if (student.getLogin().equals(login) && student.getPassword().equals(password)) {
                 return student.getId();
             }
         }
@@ -132,25 +134,25 @@ public class OperationsController {
         return 0;
     }
 
-    @RequestMapping(value = "/group/info/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/group/info/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public int getGroupNumberByGroupId(@PathVariable("id") long id){
+    public int getGroupNumberByGroupId(@PathVariable("id") long id) {
         Group group = groupsService.getById(id);
         return group.getGroupNumber();
     }
 
-    @RequestMapping(value = "/course/group/info/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/course/group/info/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public long getCourseNumberByGroupId(@PathVariable("id") long id){
+    public long getCourseNumberByGroupId(@PathVariable("id") long id) {
         Group group = groupsService.getById(id);
         long courseId = group.getCourseId();
         Course course = coursesService.getById(courseId);
         return course.getCourseNumber();
     }
 
-    @RequestMapping(value = "/faculty/course/group/info/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/faculty/course/group/info/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public String getFacultyByGroupId(@PathVariable("id") long id){
+    public String getFacultyByGroupId(@PathVariable("id") long id) {
         Group group = groupsService.getById(id);
         long courseId = group.getCourseId();
         Course course = coursesService.getById(courseId);
@@ -159,9 +161,9 @@ public class OperationsController {
         return faculty.getName();
     }
 
-    @RequestMapping(value = "/student/info/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/student/info/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public String[] getStudentInfoByStudentId(@PathVariable("id") long id){
+    public String[] getStudentInfoByStudentId(@PathVariable("id") long id) {
         Student student = studentsService.getById(id);
         String name = student.getName();
 
@@ -169,11 +171,11 @@ public class OperationsController {
         String group_number = Integer.toString(group.getGroupNumber());
 
         Course course = coursesService.getById(group.getCourseId());
-        String course_number =Long.toString( course.getCourseNumber());
+        String course_number = Long.toString(course.getCourseNumber());
 
         Faculty faculty = facultiesService.getById(course.getFacultyId());
         String faculty_name = faculty.getName();
 
-        return new String[]{name,group_number,course_number,faculty_name};
+        return new String[]{name, group_number, course_number, faculty_name};
     }
 }
